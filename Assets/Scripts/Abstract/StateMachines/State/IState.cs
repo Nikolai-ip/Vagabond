@@ -1,0 +1,8 @@
+﻿namespace Abstract.StateMachines.State
+{
+    public interface IState
+    {
+         void Enter();
+         void Exit();
+    }
+}
