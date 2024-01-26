@@ -31,7 +31,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Merging main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -128,14 +128,7 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/PlayerControl/States/BodyStates/Idle.cs</url>
           <line>35</line>
-          <properties documentPath="D:\UnityProjects\Vagabond\Assets\Scripts\PlayerControl\States\Idle.cs" initialLine="35" containingFunctionPresentation="Method 'InputHandle'">
-            <startOffsets>
-              <option value="793" />
-            </startOffsets>
-            <endOffsets>
-              <option value="830" />
-            </endOffsets>
-          </properties>
+          <properties documentPath="D:\UnityProjects\Vagabond\Assets\Scripts\PlayerControl\States\Idle.cs" initialLine="35" containingFunctionPresentation="Method 'InputHandle'" />
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
