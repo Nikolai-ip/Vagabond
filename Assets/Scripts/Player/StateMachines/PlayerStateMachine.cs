@@ -3,38 +3,43 @@ using System.Collections.Generic;
 using Abstract.StateMachine.State;
 using Abstract.StateMachines;
 using Abstract.StateMachines.State;
+using Effects;
+using Player.States.BodyStates;
 using UnityEngine;
 
-namespace PlayerControl.StateMachines
+namespace Player.StateMachines
 {
     public class PlayerStateMachine:MonoBehaviour,IInputStateMachine
     {
-        enum  StateMachineType
-        {
-            Body,
-            Hand
-        }
-        [SerializeField] private StateMachineType _stateMachineType;
-        public IInputHandleable InputHandleableState
-        {
-            get => _currentState;
-        }
-
+        public IInputHandleable InputHandleableState => _currentState;
+        
         [SerializeField] private PlayerState _currentState;
-        [field:SerializeField] private List<PlayerState> _states;
-
-
+        private List<PlayerState> _states;
+        [SerializeField] private Idle _idleState;
+        [SerializeField] private Fall _fallState;
+        [SerializeField] private Jump _jumpState;
+        [SerializeField] private Move _moveState;
+        [SerializeField] private Attack _attackState;
         private void Start()
         {
             InitStates();
         }
 
+        private event Action LedgeFound;
         private void InitStates()
         {
-            foreach (var state in _states)
+            var moveFX = new MoveHorizontalFX();
+            var jumpFX = new JumpFX();
+            var flipFX = new FlipFX();
+            _jumpState.InitState(this, moveFX, flipFX, jumpFX, ref LedgeFound);
+            _fallState.InitState(this, moveFX, flipFX, ref LedgeFound);
+            _moveState.InitState(this, moveFX, flipFX);
+            _attackState.InitState(this);
+            _idleState.InitState(this);
+            _states = new List<PlayerState>()
             {
-                state.InitStateMachine(this);
-            }
+                _idleState, _fallState, _jumpState, _moveState, _attackState
+            };
         }
         public void ChangeState<T>(object sender) where T : IState
         {
@@ -52,7 +57,7 @@ namespace PlayerControl.StateMachines
                 throw new Exception($"{typeof(T)} doesn't have contains in the states");
             }
         }
-
+        
         private void FixedUpdate()
         {
             _currentState.FixedUpdate();
@@ -61,6 +66,10 @@ namespace PlayerControl.StateMachines
         private void Update()
         {
             _currentState.Update();
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                LedgeFound?.Invoke();
+            }
         }
     }
 }

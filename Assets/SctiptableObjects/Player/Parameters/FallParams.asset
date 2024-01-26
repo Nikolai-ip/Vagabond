@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326ee357578e477793f314216d0fa29c, type: 3}
   m_Name: FallParams
   m_EditorClassIdentifier: 
-  <MaxFallVelocity>k__BackingField: 0
-  <FallGravityScale>k__BackingField: 0
+  <MaxFallVelocity>k__BackingField: 15
+  <FallGravityScale>k__BackingField: 2

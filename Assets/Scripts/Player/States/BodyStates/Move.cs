@@ -1,19 +1,19 @@
 ﻿using Abstract.StateMachines.State;
 using Effects;
 using Parameters;
-using PlayerControl.Signals;
-using PlayerControl.StateMachines;
+using Player.Signals;
+using Player.StateMachines;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PlayerControl.States.BodyStates
+namespace Player.States.BodyStates
 {
     [CreateAssetMenu(menuName = "ScriptableObjects/Player/BodyStates/MoveState", fileName = "MoveState")]
     public class Move:PlayerState
     {
         [SerializeField] private MoveParams _moveParams;
-        private MoveHorizontalFX _moveFX = new();
-        private FlipFX _flipFX = new();
+        private MoveHorizontalFX _moveFX;
+        private FlipFX _flipFX;
         private float _horizontalMovement;
         private Rigidbody2D _rb;
         private Transform _tr;
@@ -27,11 +27,6 @@ namespace PlayerControl.States.BodyStates
         {
             PlayerEventBus.Invoke(new MoveSignal(false));
         }
-
-        public override void Update()
-        {
-        }
-
         public override void FixedUpdate()
         {
             _moveFX.Move(_rb,_moveParams,_horizontalMovement);
@@ -40,22 +35,24 @@ namespace PlayerControl.States.BodyStates
 
         public override void InputHandle(ref InputAction inputAction)
         {
+            if (inputAction == null) return;
             if (inputAction.name == "MoveX")
             { 
                 _horizontalMovement = inputAction.ReadValue<Vector2>().x;
                 if (Mathf.Approximately(_horizontalMovement,0))
                     StateMachine.ChangeState<Idle>(this);
             }
-
             if (inputAction.name == "Jump")
             {
                 StateMachine.ChangeState<Jump>(this);
             }
         }
     
-        public override void InitStateMachine(PlayerStateMachine stateMachine)
+        public void InitState(PlayerStateMachine stateMachine, MoveHorizontalFX moveHorizontalFX, FlipFX flipFX)
         {
-            base.InitStateMachine(stateMachine);
+            StateMachine = stateMachine;
+            _moveFX = moveHorizontalFX;
+            _flipFX = flipFX;
             _rb = stateMachine.GetComponent<Rigidbody2D>();
             _tr = stateMachine.GetComponent<Transform>();
         }

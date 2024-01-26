@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddc99ad73d8b4e7d91284b35f64c2d27, type: 3}
-  m_Name: JumpParameters
+  m_Script: {fileID: 11500000, guid: 4b542697b8954a59bc2c43a208e3a120, type: 3}
+  m_Name: IdleHandState
   m_EditorClassIdentifier: 
-  <JumpHeight>k__BackingField: 6

@@ -1,5 +1,5 @@
 ﻿using Abstract.StateMachine.State;
-using PlayerControl.StateMachines;
+using Player.StateMachines;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,14 +12,13 @@ namespace Abstract.StateMachines.State
 
         public abstract void Exit();
         
-        public abstract void Update();
+        public virtual void Update(){}
         
-        public abstract void FixedUpdate();
+        public virtual void FixedUpdate(){}
         public abstract void InputHandle(ref InputAction inputAction);
-
-        public virtual void InitStateMachine(PlayerStateMachine stateMachine)
-        {
-            StateMachine = stateMachine;
-        }
+        
+        public virtual void HandleAnimationEvent(){}
+        public virtual void OnCollisionWithWall(){}
+        
     }
 }

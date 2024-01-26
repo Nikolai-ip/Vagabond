@@ -1,6 +1,6 @@
 ﻿using Abstract.EventBus;
 
-namespace PlayerControl.Signals
+namespace Player.Signals
 {
     public class JumpSignal:ISignal
     {

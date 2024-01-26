@@ -1,4 +1,4 @@
-using PlayerControl.StateMachines;
+using Player.StateMachines;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,12 +15,14 @@ public class InputHandler : MonoBehaviour
         _playerInput = new PlayerInput();
         _playerInput.Enable();
         _playerInput.Main.Jump.performed += Jump;
+        _playerInput.Main.Attack.performed += Attack;
+
     }
 
     private void OnDisable()
     {
         _playerInput.Disable();
-        _playerInput.Main.Jump.performed -= Jump;
+        _playerInput.Main.Attack.performed -= Attack;
     }
     private void FixedUpdate()
     {
@@ -29,5 +31,9 @@ public class InputHandler : MonoBehaviour
     private void Jump(InputAction.CallbackContext callbackContext)
     {
         _stateMachinesController.InputToStateMachine(_playerInput.Main.Jump);
+    }
+    private void Attack(InputAction.CallbackContext callbackContext)
+    {
+        _stateMachinesController.InputToStateMachine(_playerInput.Main.Attack);
     }
 }

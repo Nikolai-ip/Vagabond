@@ -1,19 +1,20 @@
 ﻿using Abstract.EventBus;
-using PlayerControl.Signals;
+using Player.Signals;
 using UnityEngine;
 
-namespace PlayerControl.AnimationModule
+namespace Player.AnimationModule
 {
     public class PlayerAnimator:MonoBehaviour
     {
         private Animator _animator;
         private readonly int _isRunningID = Animator.StringToHash("IsRunning");
-        private static readonly int JumpStart = Animator.StringToHash("JumpStart");
         [SerializeField] private float _percentOfInitialVelocityToPlayAnim;
         [SerializeField] private float _percentOfFallVelocityToPlayAnim;
+        private static readonly int JumpStart = Animator.StringToHash("JumpStart");
         private static readonly int JumpVelocityCloseToZero = Animator.StringToHash("JumpVelocityCloseToZero");
         private static readonly int JumpFinish = Animator.StringToHash("JumpFinish");
         private static readonly int FallHightVelocity = Animator.StringToHash("FallHightVelocity");
+        private static readonly int Attack = Animator.StringToHash("Attack");
 
         private void Start()
         {
@@ -21,6 +22,7 @@ namespace PlayerControl.AnimationModule
             PlayerEventBus.Subscribe<MoveSignal>(PlayMoveAnimation);
             PlayerEventBus.Subscribe<JumpSignal>(PlayJumpAnimation);
             PlayerEventBus.Subscribe<FallSignal>(PlayFallAnimation);
+            PlayerEventBus.Subscribe<AttackSignal>(PlayAttackAnimation);
         }
 
         private void PlayMoveAnimation(MoveSignal moveSignal)
@@ -52,6 +54,14 @@ namespace PlayerControl.AnimationModule
             {
                 _animator.SetTrigger(FallHightVelocity);
             }
+        }
+
+        private void PlayAttackAnimation(AttackSignal attackSignal)
+        {
+            float originSpeedAnimation = _animator.speed;
+            _animator.speed = attackSignal.AttackSpeed;
+            _animator.SetTrigger(Attack);
+            _animator.speed = originSpeedAnimation;
         }
     }
 }

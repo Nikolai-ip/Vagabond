@@ -2,12 +2,12 @@
 using Abstract.StateMachines.State;
 using Effects;
 using Parameters;
-using PlayerControl.Signals;
-using PlayerControl.StateMachines;
+using Player.Signals;
+using Player.StateMachines;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PlayerControl.States.BodyStates
+namespace Player.States.BodyStates
 {
     [CreateAssetMenu(menuName = "ScriptableObjects/Player/BodyStates/JumpState",fileName = "JumpState")]
     public class Jump:PlayerState
@@ -16,9 +16,9 @@ namespace PlayerControl.States.BodyStates
         [SerializeField] private MoveParams _moveParams;
         private Rigidbody2D _rb;
         private Transform _tr;
-        private MoveHorizontalFX _moveFX = new();
-        private FlipFX _flipFX = new();
-        private JumpFX _jumpFX = new();
+        private MoveHorizontalFX _moveFX;
+        private FlipFX _flipFX;
+        private JumpFX _jumpFX;
         private float _horizontalMovement;
         private float _flipMoveX;
         private float _maxJumpVelocity;
@@ -36,11 +36,6 @@ namespace PlayerControl.States.BodyStates
         public override void Exit()
         {
         }
-
-        public override void Update()
-        {
-        }
-
         public override void FixedUpdate()
         {
             _moveFX.Move(_rb,_moveParams,_horizontalMovement);
@@ -56,6 +51,7 @@ namespace PlayerControl.States.BodyStates
         
         public override void InputHandle(ref InputAction inputAction)
         {
+            if (inputAction == null) return;
             if (inputAction.name == "MoveX")
             { 
                 _horizontalMovement = inputAction.ReadValue<Vector2>().x;
@@ -66,9 +62,12 @@ namespace PlayerControl.States.BodyStates
             }
         }
 
-        public override void InitStateMachine(PlayerStateMachine stateMachine)
+        public void InitState(PlayerStateMachine stateMachine, MoveHorizontalFX moveHorizontalFX, FlipFX flipFX, JumpFX jumpFX,ref Action ledgeDetection)
         {
-            base.InitStateMachine(stateMachine);
+            StateMachine = stateMachine;
+            _moveFX = moveHorizontalFX;
+            _flipFX = flipFX;
+            _jumpFX = jumpFX;
             _rb = stateMachine.GetComponent<Rigidbody2D>();
             _tr = stateMachine.GetComponent<Transform>();
         }

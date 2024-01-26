@@ -1,12 +1,13 @@
-﻿using Abstract.StateMachines.State;
+﻿using System;
+using Abstract.StateMachines.State;
 using Effects;
 using Parameters;
-using PlayerControl.Signals;
-using PlayerControl.StateMachines;
+using Player.Signals;
+using Player.StateMachines;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PlayerControl.States.BodyStates
+namespace Player.States.BodyStates
 {
     [CreateAssetMenu(menuName = "ScriptableObjects/Player/BodyStates/FallState",fileName = "FallState")]
     public class Fall:PlayerState
@@ -15,8 +16,8 @@ namespace PlayerControl.States.BodyStates
         private Transform _tr;
         [SerializeField] private MoveParams _moveParams;
         [SerializeField] private FallParams _fallParams;
-        private MoveHorizontalFX _moveFX = new();
-        private FlipFX _flipFX = new();
+        private MoveHorizontalFX _moveFX;
+        private FlipFX _flipFX;
         private float _moveX;
         private FallSignal _fallSignal = new();
         public override void Enter()
@@ -29,11 +30,6 @@ namespace PlayerControl.States.BodyStates
         {
             _rb.gravityScale /= _fallParams.FallGravityScale;
         }
-
-        public override void Update()
-        {
-        }
-
         public override void FixedUpdate()
         {
             _moveFX.Move(_rb,_moveParams,_moveX);
@@ -53,6 +49,7 @@ namespace PlayerControl.States.BodyStates
         }
         public override void InputHandle(ref InputAction inputAction)
         {
+            if (inputAction == null) return;
             if (inputAction.name == "MoveX")
             {
                 _moveX = inputAction.ReadValue<Vector2>().x;
@@ -62,12 +59,18 @@ namespace PlayerControl.States.BodyStates
                 _moveX = 0;
             }
         }
-
-        public override void InitStateMachine(PlayerStateMachine stateMachine)
+        private void OnLedgeDetection()
         {
-            base.InitStateMachine(stateMachine);
+            Debug.Log("!");
+        }
+        public void InitState(PlayerStateMachine stateMachine, MoveHorizontalFX moveHorizontalFX, FlipFX flipFX, ref Action ledgeDetection)
+        {
+            StateMachine = stateMachine;
+            _moveFX = moveHorizontalFX;
+            _flipFX = flipFX;
             _rb = stateMachine.GetComponent<Rigidbody2D>();
             _tr = stateMachine.GetComponent<Transform>();
+            ledgeDetection += OnLedgeDetection;
         }
     }
 }
