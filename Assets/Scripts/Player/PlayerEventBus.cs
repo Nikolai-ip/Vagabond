@@ -21,7 +21,6 @@ public class PlayerEventBus
 
     public static void Invoke<T>(T signal) where T:ISignal
     {
-        var a = 5;
         if (_signalCallbacks.TryGetValue(signal.GetType(), out var actions))
         {
             InvokeActions(actions,signal);
